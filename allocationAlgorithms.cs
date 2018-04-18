@@ -128,7 +128,7 @@ namespace MemoryAllocationProject
 		static public bool worstFit(List<block> freeBlocks, List<block> busyBlocks, block allocatedBlock)
 		{
 			int freeBlockPlace;
-			freeBlockPlace = bestBlockFit(freeBlocks, allocatedBlock.size);
+			freeBlockPlace = worstBlockFit(freeBlocks, allocatedBlock.size);
 			if (freeBlockPlace != -1)
 			{
 				allocate(freeBlocks, busyBlocks, allocatedBlock, freeBlockPlace);
