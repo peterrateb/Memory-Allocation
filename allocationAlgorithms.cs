@@ -88,7 +88,7 @@ namespace MemoryAllocationProject
 			freeBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
 			combineContFreePlaces(freeBlocks);
 		}
-		static public void combineContFreePlaces (List<block> freeBlocks){
+		static private void combineContFreePlaces (List<block> freeBlocks){
 			block contFreePlace; float end1, start2;
 			for (int i = 0; i < freeBlocks.Count; i++) {
 				end1 = freeBlocks[i].startaddress + freeBlocks[i].size;
