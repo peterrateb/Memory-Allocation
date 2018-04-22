@@ -71,7 +71,7 @@ namespace MemoryAllocationProject
 			}
 			busyBlocks.Add(allocatedBlock);
 		}
-		static private void deallocate(List<block> freeBlocks, List<block> busyBlocks, string deallocatedBlockName)
+		static public void deallocate(List<block> freeBlocks, List<block> busyBlocks, string deallocatedBlockName)
 		{
 			int deallocatedBlockPlace = -1;
 			for (int i = 0; i < busyBlocks.Count; i++) {
