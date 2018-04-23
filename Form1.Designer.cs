@@ -29,6 +29,9 @@ namespace MemoryOSproject
         private void InitializeComponent()
         {
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.scale_button = new System.Windows.Forms.Button();
+            this.scale_label = new System.Windows.Forms.Label();
+            this.scale_textBox = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.holeclear = new System.Windows.Forms.Button();
             this.holeedit = new System.Windows.Forms.Button();
@@ -50,9 +53,6 @@ namespace MemoryOSproject
             this.processesbutton = new System.Windows.Forms.Button();
             this.deallocatebutton = new System.Windows.Forms.Button();
             this.compactbutton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -64,15 +64,47 @@ namespace MemoryOSproject
             // groupBox5
             // 
             this.groupBox5.AutoSize = true;
-            this.groupBox5.Controls.Add(this.button1);
-            this.groupBox5.Controls.Add(this.label2);
-            this.groupBox5.Controls.Add(this.textBox1);
+            this.groupBox5.Controls.Add(this.scale_button);
+            this.groupBox5.Controls.Add(this.scale_label);
+            this.groupBox5.Controls.Add(this.scale_textBox);
             this.groupBox5.Location = new System.Drawing.Point(448, 22);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(294, 340);
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "groupBox5";
+            // 
+            // scale_button
+            // 
+            this.scale_button.Enabled = false;
+            this.scale_button.Location = new System.Drawing.Point(69, 17);
+            this.scale_button.Name = "scale_button";
+            this.scale_button.Size = new System.Drawing.Size(75, 23);
+            this.scale_button.TabIndex = 23;
+            this.scale_button.Text = "Apply";
+            this.scale_button.UseVisualStyleBackColor = true;
+            this.scale_button.Visible = false;
+            this.scale_button.Click += new System.EventHandler(this.scale_button_Click);
+            // 
+            // scale_label
+            // 
+            this.scale_label.AutoSize = true;
+            this.scale_label.Location = new System.Drawing.Point(9, 21);
+            this.scale_label.Name = "scale_label";
+            this.scale_label.Size = new System.Drawing.Size(34, 13);
+            this.scale_label.TabIndex = 22;
+            this.scale_label.Text = "Scale";
+            this.scale_label.Visible = false;
+            // 
+            // scale_textBox
+            // 
+            this.scale_textBox.Location = new System.Drawing.Point(45, 18);
+            this.scale_textBox.Name = "scale_textBox";
+            this.scale_textBox.Size = new System.Drawing.Size(22, 20);
+            this.scale_textBox.TabIndex = 21;
+            this.scale_textBox.Text = "1";
+            this.scale_textBox.Visible = false;
+            this.scale_textBox.TextChanged += new System.EventHandler(this.scale_textBox_TextChanged);
             // 
             // groupBox4
             // 
@@ -339,32 +371,6 @@ namespace MemoryOSproject
             this.compactbutton.Visible = false;
             this.compactbutton.Click += new System.EventHandler(this.compactbutton_Click);
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(45, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(22, 20);
-            this.textBox1.TabIndex = 21;
-            this.textBox1.Text = "1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 21);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 22;
-            this.label2.Text = "Scale";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(69, 17);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 23;
-            this.button1.Text = "Apply";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,9 +429,9 @@ namespace MemoryOSproject
         private System.Windows.Forms.Button processesbutton;
         private System.Windows.Forms.Button deallocatebutton;
         private System.Windows.Forms.Button compactbutton;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox scale_textBox;
+        private System.Windows.Forms.Label scale_label;
+        private System.Windows.Forms.Button scale_button;
         //private System.Windows.Forms.Button processedit;
         //private System.Windows.Forms.Button processclear;
     }
