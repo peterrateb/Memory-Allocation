@@ -81,7 +81,8 @@ namespace MemoryOSproject
             resetbutton.Enabled = false;
             deallocatebutton.Enabled = false;
             deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                
+            compactbutton.Visible = false;
+            compactbutton.Enabled = false;
             freeBlocks.Clear();
             busyBlocks.Clear();
             dtholes.Clear();
@@ -238,6 +239,7 @@ namespace MemoryOSproject
             label1.Visible = true;
             comboBox1.Visible = true;
             deallocatebutton.Visible = true;
+            compactbutton.Visible = true;
 
             for (int i = 0; i < dtholes.Rows.Count; i++)
             {
@@ -321,15 +323,21 @@ namespace MemoryOSproject
                     deallocateall();
                 if (comboBox1.SelectedIndex == 0) //first fit algorithm
                 {
+                    deleteMemory();
                     allocationdone =  allocationAlgorithms.firstFit(freeBlocks, busyBlocks, allocated);
+                    DrawMemory(freeBlocks, memorysize , scale);
                 }
                 else if (comboBox1.SelectedIndex == 1) // best fit algorithm
                 {
+                    deleteMemory();
                     allocationdone = allocationAlgorithms.bestFit(freeBlocks, busyBlocks, allocated);
+                    DrawMemory(freeBlocks, memorysize, scale);
                 }
                 else if (comboBox1.SelectedIndex == 2) //worst fit algorithm
                 {
+                    deleteMemory();
                     allocationdone = allocationAlgorithms.worstFit(freeBlocks, busyBlocks, allocated);
+                    DrawMemory(freeBlocks, memorysize, scale);
                 }
                 /*else
                 {
@@ -341,6 +349,7 @@ namespace MemoryOSproject
                 MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
                 
             }
+            compactbutton.Enabled = true;
             drawAllocatedBlock(busyBlocks, scale);
 
         }
@@ -409,7 +418,7 @@ namespace MemoryOSproject
         {
             memaddress = new Label[freeBlocks.Count*2 + 2];
             memblock = new Label[freeBlocks.Count *2 + 1];
-            int startpoint = 30;
+            int startpoint = 50;
             int address = 0;
             memaddress[0] = new Label();
             memaddress[0].Location = new Point(10 , startpoint-5); 
@@ -506,7 +515,7 @@ namespace MemoryOSproject
 
             for (int i = 0; i < busyBlocks.Count; i++)
             {
-                int startpoint = 30 + allocatedblocks[i].startaddress * s;
+                int startpoint = 50 + allocatedblocks[i].startaddress * s;
                 int address = allocatedblocks[i].startaddress;
                 busyblockmem[i] = new Label();
                 busyblockmem[i].Location = new Point(50, startpoint);
@@ -574,10 +583,25 @@ namespace MemoryOSproject
             deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             deallocatebutton.Enabled = false;
             //Label temp = (Label)sender;
+            deleteMemory();
+            deallocateall();
             allocationAlgorithms.deallocate(freeBlocks, busyBlocks, busyblockmem[deallcateindex].Text);
-            this.groupBox5.Controls.Remove(busyblockmem[deallcateindex]);
-            this.groupBox5.Controls.Remove(allocatedaddress[deallcateindex]);
+            //this.groupBox5.Controls.Remove(busyblockmem[deallcateindex]);
+            //this.groupBox5.Controls.Remove(allocatedaddress[deallcateindex]);
+            DrawMemory(freeBlocks, memorysize, scale);
+            drawAllocatedBlock(busyBlocks, scale);
             //Console.WriteLine("/" + deallcateindex + "/");
+        }
+
+        private void compactbutton_Click(object sender, EventArgs e)
+        {
+            deleteMemory();
+            deallocateall();
+            allocationAlgorithms.compact(freeBlocks, busyBlocks, memorysize);
+            DrawMemory(freeBlocks, memorysize, scale);
+            drawAllocatedBlock(busyBlocks, scale);
+            
+
         }
 
 
