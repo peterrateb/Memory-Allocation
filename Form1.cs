@@ -15,6 +15,7 @@ namespace MemoryOSproject
     public partial class Form1 : Form
     {
         int memorysize;
+        int scale = 1;
         int holeno=0;
         int processno = 0;
         DataTable dtholes = new DataTable();
@@ -83,6 +84,10 @@ namespace MemoryOSproject
             deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             compactbutton.Visible = false;
             compactbutton.Enabled = false;
+            scale_label.Visible = false;
+            scale_button.Visible = false;
+            scale_textBox.Visible = false;
+            scale_button.Enabled = false;
             freeBlocks.Clear();
             busyBlocks.Clear();
             dtholes.Clear();
@@ -91,7 +96,7 @@ namespace MemoryOSproject
 
 
         
-
+        
         private void memorytextBox3_TextChanged(object sender, EventArgs e)
         {
             int n;
@@ -240,6 +245,10 @@ namespace MemoryOSproject
             comboBox1.Visible = true;
             deallocatebutton.Visible = true;
             compactbutton.Visible = true;
+            scale_button.Visible = true;
+            scale_label.Visible = true;
+            scale_textBox.Visible = true;
+            scale_button.Enabled = true;
 
             for (int i = 0; i < dtholes.Rows.Count; i++)
             {
@@ -413,7 +422,7 @@ namespace MemoryOSproject
                 allocatebutton.PerformClick();
         }
 
-        int scale = 1;
+        
         private void DrawMemory(List<block> free, int memosize , int s)
         {
             memaddress = new Label[freeBlocks.Count*2 + 2];
@@ -602,6 +611,36 @@ namespace MemoryOSproject
             drawAllocatedBlock(busyBlocks, scale);
             
 
+        }
+
+        private void scale_textBox_TextChanged(object sender, EventArgs e)
+        {
+            int n;
+            if (int.TryParse(scale_textBox.Text, out n))
+            {
+                if (n == 0 || n > 10)
+                {
+                    scale_button.Enabled = false;
+                }
+                else
+                    scale_button.Enabled = true;
+            }
+        }
+
+        private void scale_button_Click(object sender, EventArgs e)
+        {
+            bool parsed = Int32.TryParse(scale_textBox.Text, out scale);
+            if (scale < 1 || !parsed)
+            {
+                MessageBox.Show("please Enter a positive integer value between 1 & 10", "Warning");
+            }
+            deleteMemory();
+            deallocateall();
+            //this.AutoScroll = false;
+            DrawMemory(freeBlocks,memorysize,scale);
+            drawAllocatedBlock(busyBlocks, scale);
+            //ganttDisplay(nolines, waitingtime, n, scale);
+            //this.AutoScroll = true;
         }
 
 
