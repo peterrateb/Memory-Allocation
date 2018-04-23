@@ -1,4 +1,4 @@
-﻿using dataTypes;
+using dataTypes;
 using MemoryAllocationProject;
 using System;
 using System.Collections.Generic;
@@ -21,8 +21,12 @@ namespace MemoryOSproject
         DataTable dtprocess = new DataTable();
         List<block> freeBlocks = new List<block>();
         List<block> busyBlocks = new List<block>();
+        block allocated;
         Label[] memblock;
         Label[] memaddress;
+        Label[] busyblockmem; //allocated blocks
+        Label[] allocatedaddress;
+        int deallcateindex;
         public Form1()
         {
             InitializeComponent();
@@ -45,6 +49,11 @@ namespace MemoryOSproject
             //processno = 0;
             dtholes.Clear();
             dtprocess.Clear();
+            if (processesbutton.Visible == false)
+            {
+                deleteMemory();
+                deallocateall();
+            }
             memorytextBox3.Text = "Enter Memory size";
             holeaddresstextBox.Text = "Enter start address";
             holesizetextBox.Text = "Enter size of hole";
@@ -69,8 +78,16 @@ namespace MemoryOSproject
             allocatebutton.Enabled = false;
             label1.Visible = false;
             comboBox1.Visible = false;
-            deleteMemory();
+            resetbutton.Enabled = false;
+            deallocatebutton.Enabled = false;
+            deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                
+            freeBlocks.Clear();
+            busyBlocks.Clear();
+            dtholes.Clear();
+            dtprocess.Clear();
         }
+
 
         
 
@@ -102,6 +119,7 @@ namespace MemoryOSproject
                 holebutton.Enabled = true;
                 holeedit.Enabled = true;
                 holeclear.Enabled = true;
+                resetbutton.Enabled = true;
 
             }
         }
@@ -219,6 +237,8 @@ namespace MemoryOSproject
             allocatebutton.Visible = true;
             label1.Visible = true;
             comboBox1.Visible = true;
+            deallocatebutton.Visible = true;
+
             for (int i = 0; i < dtholes.Rows.Count; i++)
             {
                 block freeblock = new block() ;
@@ -282,8 +302,10 @@ namespace MemoryOSproject
 
         }
 
-        private void takeprocessdata (string name , int size)
+        private void takeprocessdata (string name , int size , int selectedindex)
         {
+            bool allocationdone = false;
+            
             if (size > memorysize)
             {
                 MessageBox.Show("process is out of range", "Memory Error");
@@ -293,15 +315,44 @@ namespace MemoryOSproject
                 processno++;
                 dtprocess.Rows.Add(name, size);
                 //dataGridView2.DataSource = dtprocess;
+                allocated.name = name;
+                allocated.size = size;
+                if (busyBlocks.Count > 0)
+                    deallocateall();
+                if (comboBox1.SelectedIndex == 0) //first fit algorithm
+                {
+                    allocationdone =  allocationAlgorithms.firstFit(freeBlocks, busyBlocks, allocated);
+                }
+                else if (comboBox1.SelectedIndex == 1) // best fit algorithm
+                {
+                    allocationdone = allocationAlgorithms.bestFit(freeBlocks, busyBlocks, allocated);
+                }
+                else if (comboBox1.SelectedIndex == 2) //worst fit algorithm
+                {
+                    allocationdone = allocationAlgorithms.worstFit(freeBlocks, busyBlocks, allocated);
+                }
+                /*else
+                {
+                    MessageBox.Show("Please, select an algorithm", "Warning");
+                }*/
             }
+            if (!allocationdone)
+            {
+                MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
+                
+            }
+            drawAllocatedBlock(busyBlocks, scale);
 
         }
+
+
 
         private void allocatebutton_Click(object sender, EventArgs e)
         {
 
             string name;
             int size;
+            
             name = processname.Text;
             bool parsedsize = Int32.TryParse(processsize.Text, out size);
 
@@ -311,12 +362,19 @@ namespace MemoryOSproject
             {
                 MessageBox.Show("Name of process missed", "Error");
             }
+            else if (comboBox1.SelectedIndex != 0 && comboBox1.SelectedIndex != 1 && comboBox1.SelectedIndex != 2)
+            {
+                MessageBox.Show("Please, select an algorithm", "Warning");
+            }
             else
             {
-                takeprocessdata(name, size);
+                takeprocessdata(name, size, comboBox1.SelectedIndex);
                 processname.Text = "Process name";
                 processsize.Text = "Process Size";
+                
             }
+
+            
             /*
             if (processno != 0)
             {
@@ -365,16 +423,16 @@ namespace MemoryOSproject
             {
                 int blackblockhieght = (freeBlocks[i].startaddress - address) * s;
                 int holeblockhieght = (freeBlocks[i].size) * s;
-                bool smallhieght = false;
-                if (blackblockhieght < 20)
+                //bool smallhieght = false;
+                /*if (blackblockhieght < 20)
                 {
                     blackblockhieght = 20;
                     smallhieght = true;
-                }
+                }*/
                 memblock[i * 2] = new Label();
                 memblock[i * 2].Location = new Point(50,startpoint);
                 memblock[i * 2].Size = new System.Drawing.Size(200, blackblockhieght);
-                memblock[i * 2].BackColor = System.Drawing.Color.Black;
+                memblock[i * 2].BackColor = System.Drawing.Color.DimGray;
 
                 startpoint += blackblockhieght;
                 address = freeBlocks[i].startaddress;
@@ -411,7 +469,7 @@ namespace MemoryOSproject
             memblock[freeBlocks.Count * 2] = new Label();
             memblock[freeBlocks.Count * 2].Location = new Point(50, startpoint);
             memblock[freeBlocks.Count * 2].Size = new System.Drawing.Size(200, (memorysize-address) * s);
-            memblock[freeBlocks.Count * 2].BackColor = System.Drawing.Color.Black;
+            memblock[freeBlocks.Count * 2].BackColor = System.Drawing.Color.DimGray;
             ///
             //Console.WriteLine("/" + freeBlocks.Count * 2 + "--->" + startpoint + "/");
             startpoint += (memorysize - address) * s;
@@ -439,6 +497,92 @@ namespace MemoryOSproject
                 this.groupBox5.Controls.Remove(memaddress[i + 1]);
             }
         }
+
+        private void drawAllocatedBlock(List<block> allocatedblocks, int s)
+        {
+            
+            busyblockmem = new Label[ busyBlocks.Count];
+            allocatedaddress = new Label[busyBlocks.Count];
+
+            for (int i = 0; i < busyBlocks.Count; i++)
+            {
+                int startpoint = 30 + allocatedblocks[i].startaddress * s;
+                int address = allocatedblocks[i].startaddress;
+                busyblockmem[i] = new Label();
+                busyblockmem[i].Location = new Point(50, startpoint);
+                busyblockmem[i].Size = new System.Drawing.Size(200, (allocatedblocks[i].size) * s);
+                busyblockmem[i].BackColor = System.Drawing.Color.Gold;
+                busyblockmem[i].BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+                busyblockmem[i].Text = allocatedblocks[i].name;
+                busyblockmem[i].Name = i.ToString();
+                busyblockmem[i].Font = new Font("Microsoft Sans Serif", 9);
+                busyblockmem[i].TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                busyblockmem[i].Click += (sender, EventArgs) => { blockdeallocate_Click(sender, EventArgs); };
+                busyblockmem[i].Leave += new System.EventHandler(blockdeallocate_Leave);
+                //new System.EventHandler(this.blockdeallocate_Click);
+                startpoint += (allocatedblocks[i].size) * s;
+                allocatedaddress[i] = new Label();
+                allocatedaddress[i].Location = new Point(10, startpoint - 5);
+                allocatedaddress[i].AutoSize = true;
+                allocatedaddress[i].BackColor = System.Drawing.Color.Transparent;
+                allocatedaddress[i].Text = (allocatedblocks[i].startaddress + allocatedblocks[i].size).ToString();
+                allocatedaddress[i].Font = new Font("Microsoft Sans Serif", 9 + s / 2);
+                allocatedaddress[i].TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+                this.groupBox5.Controls.Add(busyblockmem[i]);
+                busyblockmem[i].BringToFront();
+                this.groupBox5.Controls.Add(allocatedaddress[i]);
+            }
+            
+        }
+
+        private void blockdeallocate_Click( object sender, EventArgs e )
+        {
+            Label temp = (Label)sender;
+            bool parseindex = Int32.TryParse(temp.Name, out deallcateindex);
+            if (!deallocatebutton.Enabled)
+            {
+                deallocatebutton.Enabled = true;
+                deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                busyblockmem[deallcateindex].BackColor = System.Drawing.Color.Goldenrod;
+            }
+            else
+            {
+                deallocatebutton.Enabled = false;
+                deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                busyblockmem[deallcateindex].BackColor = System.Drawing.Color.Gold;
+            }
+            //deallocatebutton.Click += new System.EventHandler(deallocatebutton_Click);
+            //deallocatebutton.PerformClick();
+            //deallocatebutton.Click += (sender, EventArgs) => { deallocatebutton_Click(sender, e, index); };
+        }
+        private void blockdeallocate_Leave(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void deallocateall()
+        {
+            for (int i = 0; i < busyBlocks.Count; i++)
+            {
+                this.groupBox5.Controls.Remove(busyblockmem[i]);
+                this.groupBox5.Controls.Remove(allocatedaddress[i]);
+            }
+        }
+
+        private void deallocatebutton_Click(object sender, EventArgs e )
+        {
+            deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            deallocatebutton.Enabled = false;
+            //Label temp = (Label)sender;
+            allocationAlgorithms.deallocate(freeBlocks, busyBlocks, busyblockmem[deallcateindex].Text);
+            this.groupBox5.Controls.Remove(busyblockmem[deallcateindex]);
+            this.groupBox5.Controls.Remove(allocatedaddress[deallcateindex]);
+            //Console.WriteLine("/" + deallcateindex + "/");
+        }
+
+
+
+
 
         /*
         private void processedit_Click(object sender, EventArgs e)
