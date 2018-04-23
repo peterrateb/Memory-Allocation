@@ -102,7 +102,10 @@ namespace MemoryOSproject
             int n;
             if (int.TryParse(memorytextBox3.Text, out n))
             {
-                memorybutton.Enabled = true;
+                if(n>0)
+                    memorybutton.Enabled = true;
+                else
+                    memorybutton.Enabled = false;   
             }
             else
                 memorybutton.Enabled = false;
@@ -302,6 +305,10 @@ namespace MemoryOSproject
             {
                 MessageBox.Show("please, check hole size correctness", "Error");
             }
+            else if (start <= 0 || size <= 0)
+            {
+                MessageBox.Show("start address and size must be positive integer", "Error");
+            }
             else
             {
                 holeno++;
@@ -383,6 +390,10 @@ namespace MemoryOSproject
             else if (comboBox1.SelectedIndex != 0 && comboBox1.SelectedIndex != 1 && comboBox1.SelectedIndex != 2)
             {
                 MessageBox.Show("Please, select an algorithm", "Warning");
+            }
+            else if (size<=0)
+            {
+                MessageBox.Show("Process size mustbe positive integer", "Error");
             }
             else
             {
@@ -618,7 +629,7 @@ namespace MemoryOSproject
             int n;
             if (int.TryParse(scale_textBox.Text, out n))
             {
-                if (n == 0 || n > 10)
+                if (n <= 0 || n > 10)
                 {
                     scale_button.Enabled = false;
                 }
