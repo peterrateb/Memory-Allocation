@@ -1,4 +1,4 @@
-﻿namespace MemoryOSproject
+namespace MemoryOSproject
 {
     partial class Form1
     {
@@ -48,6 +48,8 @@
             this.processsize = new System.Windows.Forms.TextBox();
             this.processname = new System.Windows.Forms.TextBox();
             this.processesbutton = new System.Windows.Forms.Button();
+            this.deallocatebutton = new System.Windows.Forms.Button();
+            this.combinbutton = new System.Windows.Forms.Button();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -81,6 +83,7 @@
             // holeclear
             // 
             this.holeclear.Enabled = false;
+            this.holeclear.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.holeclear.Location = new System.Drawing.Point(105, 131);
             this.holeclear.Name = "holeclear";
             this.holeclear.Size = new System.Drawing.Size(75, 23);
@@ -92,6 +95,7 @@
             // holeedit
             // 
             this.holeedit.Enabled = false;
+            this.holeedit.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.holeedit.Location = new System.Drawing.Point(14, 131);
             this.holeedit.Name = "holeedit";
             this.holeedit.Size = new System.Drawing.Size(75, 23);
@@ -153,6 +157,7 @@
             this.holebutton.AutoSize = true;
             this.holebutton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.holebutton.Enabled = false;
+            this.holebutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.holebutton.Location = new System.Drawing.Point(123, 39);
             this.holebutton.Name = "holebutton";
             this.holebutton.Size = new System.Drawing.Size(75, 23);
@@ -163,6 +168,8 @@
             // 
             // resetbutton
             // 
+            this.resetbutton.Enabled = false;
+            this.resetbutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.resetbutton.Location = new System.Drawing.Point(37, 322);
             this.resetbutton.Name = "resetbutton";
             this.resetbutton.Size = new System.Drawing.Size(77, 41);
@@ -186,6 +193,7 @@
             // 
             this.memorybutton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.memorybutton.Enabled = false;
+            this.memorybutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.memorybutton.ForeColor = System.Drawing.SystemColors.ControlText;
             this.memorybutton.Location = new System.Drawing.Point(112, 49);
             this.memorybutton.Name = "memorybutton";
@@ -287,6 +295,7 @@
             // 
             this.processesbutton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.processesbutton.Enabled = false;
+            this.processesbutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.processesbutton.Location = new System.Drawing.Point(157, 47);
             this.processesbutton.Name = "processesbutton";
             this.processesbutton.Size = new System.Drawing.Size(100, 23);
@@ -295,6 +304,31 @@
             this.processesbutton.UseVisualStyleBackColor = false;
             this.processesbutton.Click += new System.EventHandler(this.processesbutton_Click);
             // 
+            // deallocatebutton
+            // 
+            this.deallocatebutton.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.deallocatebutton.Enabled = false;
+            this.deallocatebutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.deallocatebutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deallocatebutton.Location = new System.Drawing.Point(332, 322);
+            this.deallocatebutton.Name = "deallocatebutton";
+            this.deallocatebutton.Size = new System.Drawing.Size(77, 41);
+            this.deallocatebutton.TabIndex = 19;
+            this.deallocatebutton.Text = "Deallocate";
+            this.deallocatebutton.UseVisualStyleBackColor = false;
+            this.deallocatebutton.Visible = false;
+            this.deallocatebutton.Click += new System.EventHandler(this.deallocatebutton_Click);
+            // 
+            // combinbutton
+            // 
+            this.combinbutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.combinbutton.Location = new System.Drawing.Point(133, 323);
+            this.combinbutton.Name = "combinbutton";
+            this.combinbutton.Size = new System.Drawing.Size(77, 40);
+            this.combinbutton.TabIndex = 20;
+            this.combinbutton.Text = "Combine";
+            this.combinbutton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,6 +336,8 @@
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(754, 399);
+            this.Controls.Add(this.combinbutton);
+            this.Controls.Add(this.deallocatebutton);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.resetbutton);
@@ -347,6 +383,8 @@
         private System.Windows.Forms.TextBox processsize;
         private System.Windows.Forms.TextBox processname;
         private System.Windows.Forms.Button processesbutton;
+        private System.Windows.Forms.Button deallocatebutton;
+        private System.Windows.Forms.Button combinbutton;
         //private System.Windows.Forms.Button processedit;
         //private System.Windows.Forms.Button processclear;
     }
