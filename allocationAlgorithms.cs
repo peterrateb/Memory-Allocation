@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,30 +74,21 @@ namespace MemoryAllocationProject
 			}
 			busyBlocks.Add(allocatedBlock);
 		}
-        static public void deallocate(List<block> freeBlocks, List<block> busyBlocks, int deallocatedBlockPlace)
+		static public void deallocate(List<block> freeBlocks, List<block> busyBlocks, int deallocatedBlockPlace)
 		{
-			//int deallocatedBlockPlace = -1;
+			
 			block busyPlace = busyBlocks[deallocatedBlockPlace];
 			busyBlocks.RemoveAt(deallocatedBlockPlace);
 			block freePlace = busyPlace;
 			freeBlocks.Add(freePlace);
 			freeBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
 			combineContFreePlaces(freeBlocks);
-			
 		}
 		static public void compact(List<block> freeBlocks, List<block> busyBlocks, int memorySize)
 		{
 			freeBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
 			busyBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
-			for (int i = 0; i < freeBlocks.Count; i++) {
-				Console.WriteLine(freeBlocks[i].startaddress+"--->"+ freeBlocks[i].size);
-			}
-			Console.WriteLine("*************");
-			for (int i = 0; i < busyBlocks.Count; i++)
-			{
-				Console.WriteLine(busyBlocks[i].startaddress + "--->" + busyBlocks[i].size);
-			}
-			Console.WriteLine("*************");
+			
 			int freeblocksize = 0;
 			int count = freeBlocks.Count;
 			for (int i = 0; i < count; i++)
@@ -105,7 +96,6 @@ namespace MemoryAllocationProject
 				freeblocksize += freeBlocks[i].size;
 			}
 			freeBlocks.Clear();
-			Console.WriteLine("freeblocksize="+freeblocksize);
 			block freeblock;
 			freeblock.name = "";
 			freeblock.startaddress = memorySize - freeblocksize;
@@ -130,33 +120,31 @@ namespace MemoryAllocationProject
 					busyBlocks[i] = busyblock;
 				}
 			}
-			for (int i = 0; i < freeBlocks.Count; i++)
-			{
-				Console.WriteLine(freeBlocks[i].startaddress + "--->" + freeBlocks[i].size);
-			}
-			Console.WriteLine("*************");
-			for (int i = 0; i < busyBlocks.Count; i++)
-			{
-				Console.WriteLine(busyBlocks[i].startaddress + "--->" + busyBlocks[i].size);
-			}
 
 		}
 		static public void combineContFreePlaces(List<block> freeBlocks)
 		{
 			block contFreePlace; int end1, start2;
-			for (int i = 0; i < freeBlocks.Count - 1; i++)
+			bool combine = false;
+			while (!combine)
 			{
-				end1 = freeBlocks[i].startaddress + freeBlocks[i].size;
-				start2 = freeBlocks[i + 1].startaddress;
-				contFreePlace = freeBlocks[i];
-				contFreePlace.size += freeBlocks[i + 1].size;
-				if (end1 == start2)
+				combine = true;
+				for (int i = 0; i < freeBlocks.Count - 1; i++)
 				{
-					freeBlocks[i] = contFreePlace;
-					freeBlocks.RemoveAt(i + 1);
+					end1 = freeBlocks[i].startaddress + freeBlocks[i].size;
+					start2 = freeBlocks[i + 1].startaddress;
+					contFreePlace = freeBlocks[i];
+					contFreePlace.size += freeBlocks[i + 1].size;
+					if (end1 == start2)
+					{
+						combine = false;
+						freeBlocks[i] = contFreePlace;
+						freeBlocks.RemoveAt(i + 1);
 
+					}
 				}
 			}
+			
 		}
 		static public bool firstFit(List<block> freeBlocks, List<block> busyBlocks, block allocatedBlock)
 		{
