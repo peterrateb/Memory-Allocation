@@ -72,7 +72,7 @@ namespace MemoryOSproject
             this.groupBox5.Size = new System.Drawing.Size(294, 340);
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "groupBox5";
+            this.groupBox5.Text = "Memory";
             // 
             // scale_button
             // 
@@ -170,7 +170,7 @@ namespace MemoryOSproject
             // holeaddresstextBox
             // 
             this.holeaddresstextBox.Enabled = false;
-            this.holeaddresstextBox.Location = new System.Drawing.Point(13, 29);
+            this.holeaddresstextBox.Location = new System.Drawing.Point(9, 28);
             this.holeaddresstextBox.Name = "holeaddresstextBox";
             this.holeaddresstextBox.Size = new System.Drawing.Size(100, 20);
             this.holeaddresstextBox.TabIndex = 2;
@@ -182,7 +182,7 @@ namespace MemoryOSproject
             // holesizetextBox
             // 
             this.holesizetextBox.Enabled = false;
-            this.holesizetextBox.Location = new System.Drawing.Point(13, 55);
+            this.holesizetextBox.Location = new System.Drawing.Point(9, 54);
             this.holesizetextBox.Name = "holesizetextBox";
             this.holesizetextBox.Size = new System.Drawing.Size(100, 20);
             this.holesizetextBox.TabIndex = 3;
@@ -197,7 +197,7 @@ namespace MemoryOSproject
             this.holebutton.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.holebutton.Enabled = false;
             this.holebutton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.holebutton.Location = new System.Drawing.Point(123, 39);
+            this.holebutton.Location = new System.Drawing.Point(117, 39);
             this.holebutton.Name = "holebutton";
             this.holebutton.Size = new System.Drawing.Size(75, 23);
             this.holebutton.TabIndex = 0;
