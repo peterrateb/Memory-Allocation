@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,24 +74,16 @@ namespace MemoryAllocationProject
 			}
 			busyBlocks.Add(allocatedBlock);
 		}
-		static public bool deallocate(List<block> freeBlocks, List<block> busyBlocks, string deallocatedBlockName)
+        static public void deallocate(List<block> freeBlocks, List<block> busyBlocks, int deallocatedBlockPlace)
 		{
-			int deallocatedBlockPlace = -1;
-			for (int i = 0; i < busyBlocks.Count; i++)
-			{
-				if (busyBlocks[i].name == deallocatedBlockName)
-				{
-					deallocatedBlockPlace = i;
-					block busyPlace = busyBlocks[deallocatedBlockPlace];
-					busyBlocks.RemoveAt(deallocatedBlockPlace);
-					block freePlace = busyPlace;
-					freeBlocks.Add(freePlace);
-					freeBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
-					combineContFreePlaces(freeBlocks);
-					return true;
-				}
-			}
-			return false;
+			//int deallocatedBlockPlace = -1;
+			block busyPlace = busyBlocks[deallocatedBlockPlace];
+			busyBlocks.RemoveAt(deallocatedBlockPlace);
+			block freePlace = busyPlace;
+			freeBlocks.Add(freePlace);
+			freeBlocks.Sort((x, y) => x.startaddress.CompareTo(y.startaddress));
+			combineContFreePlaces(freeBlocks);
+			
 		}
 		static public void compact(List<block> freeBlocks, List<block> busyBlocks, int memorySize)
 		{
@@ -116,7 +108,7 @@ namespace MemoryAllocationProject
 			Console.WriteLine("freeblocksize="+freeblocksize);
 			block freeblock;
 			freeblock.name = "";
-			freeblock.startaddress = memorySize - 1 - freeblocksize;
+			freeblock.startaddress = memorySize - freeblocksize;
 			freeblock.size = freeblocksize;
 			freeBlocks.Add(freeblock);
 			block busyblock;
@@ -133,7 +125,7 @@ namespace MemoryAllocationProject
 				else
 				{
 					busyblock.size = busyBlocks[i].size;
-					busyblock.startaddress = busyBlocks[i - 1].startaddress + busyBlocks[i - 1].size + 1;
+					busyblock.startaddress = busyBlocks[i - 1].startaddress + busyBlocks[i - 1].size;
 					busyblock.name = busyBlocks[i].name;
 					busyBlocks[i] = busyblock;
 				}
