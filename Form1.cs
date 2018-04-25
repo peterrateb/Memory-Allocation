@@ -17,9 +17,9 @@ namespace MemoryOSproject
         int memorysize;
         int scale = 1;
         int holeno=0;
-        int processno = 0;
+        //int processno = 0;
         DataTable dtholes = new DataTable();
-        DataTable dtprocess = new DataTable();
+        //DataTable dtprocess = new DataTable();
         List<block> freeBlocks = new List<block>();
         List<block> busyBlocks = new List<block>();
         block allocated;
@@ -35,8 +35,8 @@ namespace MemoryOSproject
             dtholes.Columns.Add("no", typeof(int));
             dtholes.Columns.Add("start", typeof(int));
             dtholes.Columns.Add("Size", typeof(int));
-            dtprocess.Columns.Add("Process name", typeof(string));
-            dtprocess.Columns.Add("Size", typeof(int));
+            //dtprocess.Columns.Add("Process name", typeof(string));
+            //dtprocess.Columns.Add("Size", typeof(int));
             //dtholes.Columns.Add("Type", typeof(string));
             comboBox1.Items.Add("First Fit");
             comboBox1.Items.Add("Best Fit");
@@ -50,7 +50,7 @@ namespace MemoryOSproject
             holeno = 0;
             //processno = 0;
             dtholes.Clear();
-            dtprocess.Clear();
+            //dtprocess.Clear();
             if (processesbutton.Visible == false)
             {
                 deleteMemory();
@@ -94,7 +94,7 @@ namespace MemoryOSproject
             freeBlocks.Clear();
             busyBlocks.Clear();
             dtholes.Clear();
-            dtprocess.Clear();
+            //dtprocess.Clear();
         }
 
 
@@ -356,9 +356,9 @@ namespace MemoryOSproject
         {
             bool allocationdone = false;
             bool nameexist = false;
-            for (int i = 0; i < dtprocess.Rows.Count; i++)
+            for (int i = 0; i < busyBlocks.Count; i++)
             {
-                if (dtprocess.Rows[i][0].Equals(name))
+                if (busyBlocks[i].name==name)
                 {
                     nameexist = true;
                     break;
@@ -373,36 +373,40 @@ namespace MemoryOSproject
             {
                 MessageBox.Show("Sorry, Process name is already used", "Error");
             }
+            else if (name.Contains("reserved"))
+            {
+                MessageBox.Show("Sorry, It's forbidden to use this name", "Error");
+            }
             else
             {
-                processno++;
-                dtprocess.Rows.Add(name, size);
+                //processno++;
+                //dtprocess.Rows.Add(name, size);
                 //dataGridView2.DataSource = dtprocess;
                 allocated.name = name;
                 allocated.size = size;
                 if (busyBlocks.Count > 0)
                     //deallocateall();
-                if (comboBox1.SelectedIndex == 0) //first fit algorithm
-                {
-                    deleteMemory();
-                    allocationdone =  allocationAlgorithms.firstFit(freeBlocks, busyBlocks, allocated);
-                    if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
-                    DrawMemory(freeBlocks,busyBlocks, memorysize , scale);
-                }
-                else if (comboBox1.SelectedIndex == 1) // best fit algorithm
-                {
-                    deleteMemory();
-                    allocationdone = allocationAlgorithms.bestFit(freeBlocks, busyBlocks, allocated);
-                    if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
-                    DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
-                }
-                else if (comboBox1.SelectedIndex == 2) //worst fit algorithm
-                {
-                    deleteMemory();
-                    allocationdone = allocationAlgorithms.worstFit(freeBlocks, busyBlocks, allocated);
-                    if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
-                    DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
-                }
+                    if (comboBox1.SelectedIndex == 0) //first fit algorithm
+                    {
+                        deleteMemory();
+                        allocationdone = allocationAlgorithms.firstFit(freeBlocks, busyBlocks, allocated);
+                        if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
+                        DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
+                    }
+                    else if (comboBox1.SelectedIndex == 1) // best fit algorithm
+                    {
+                        deleteMemory();
+                        allocationdone = allocationAlgorithms.bestFit(freeBlocks, busyBlocks, allocated);
+                        if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
+                        DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
+                    }
+                    else if (comboBox1.SelectedIndex == 2) //worst fit algorithm
+                    {
+                        deleteMemory();
+                        allocationdone = allocationAlgorithms.worstFit(freeBlocks, busyBlocks, allocated);
+                        if (!allocationdone) MessageBox.Show("no more space to allocate this process try again after deallocate processes or use compact", "Warning");
+                        DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
+                    }
                 /*else
                 {
                     MessageBox.Show("Please, select an algorithm", "Warning");
@@ -753,7 +757,7 @@ namespace MemoryOSproject
             //this.groupBox5.Controls.Remove(allocatedaddress[deallcateindex]);
             DrawMemory(freeBlocks, busyBlocks, memorysize, scale);
             //drawAllocatedBlock(busyBlocks, scale);
-            Console.WriteLine("/" + deallcateindex + "/");
+            //Console.WriteLine("/" + deallcateindex + "/");
         }
 
         private void compactbutton_Click(object sender, EventArgs e)
